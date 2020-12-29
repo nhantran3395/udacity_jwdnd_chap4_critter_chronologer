@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -25,10 +26,6 @@ public class Customer {
 
     private String notes;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<Pet> pets;
-
     @CreatedDate
     @Column(name="created_at",nullable = false,columnDefinition = "datetime2 default getdate()")
     private Timestamp createAt;
@@ -36,4 +33,12 @@ public class Customer {
     @LastModifiedDate
     @Column(name="updated_at")
     private Timestamp updatedAt;
+
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<Pet> pets;
+
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<Schedule> schedules;
 }
