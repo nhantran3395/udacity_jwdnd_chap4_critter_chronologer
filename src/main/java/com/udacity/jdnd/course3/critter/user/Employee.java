@@ -36,4 +36,15 @@ public class Employee {
                     @JoinColumn(name = "skill_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     private Set<Skill> skills = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "EmployeeAvailability",
+            joinColumns = {
+                    @JoinColumn(name = "employee_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "availability_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Availability> availableDays = new HashSet<>();
+
 }
