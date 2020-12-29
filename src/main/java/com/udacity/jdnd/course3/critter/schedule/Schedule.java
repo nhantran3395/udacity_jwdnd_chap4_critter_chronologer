@@ -38,4 +38,14 @@ public class Schedule {
 
     @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
     private Set<Employee> employees = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "ScheduleActivity",
+            joinColumns = {
+                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "activity_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Activity> activities = new HashSet<>();
 }
