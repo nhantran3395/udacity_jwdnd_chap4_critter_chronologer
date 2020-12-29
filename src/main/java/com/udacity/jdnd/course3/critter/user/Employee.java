@@ -6,6 +6,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -24,4 +26,14 @@ public class Employee {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "EmployeeSkill",
+            joinColumns = {
+                    @JoinColumn(name = "employee_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "skill_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Skill> skills = new HashSet<>();
 }
