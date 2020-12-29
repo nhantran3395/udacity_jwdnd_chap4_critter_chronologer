@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -47,4 +48,13 @@ public class Employee {
                             nullable = false, updatable = false)})
     private Set<Availability> availableDays = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "EmployeeSchedule",
+            joinColumns = {
+                    @JoinColumn(name = "employee_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Schedule> schedules = new HashSet<>();
 }

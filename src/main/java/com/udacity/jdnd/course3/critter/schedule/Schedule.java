@@ -2,11 +2,14 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.user.Customer;
+import com.udacity.jdnd.course3.critter.user.Employee;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Schedule {
@@ -32,4 +35,7 @@ public class Schedule {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    private Set<Employee> employees = new HashSet<>();
 }
