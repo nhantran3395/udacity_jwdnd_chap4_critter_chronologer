@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class CustomerDTO {
     private long id;
+    private String username;
     private String name;
     private String phoneNumber;
     private String notes;
@@ -19,6 +20,14 @@ public class CustomerDTO {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {

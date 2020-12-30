@@ -1,10 +1,20 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import exception.CustomerException;
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Users.
@@ -16,14 +26,33 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @PostMapping("/customer")
-    public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+    public CustomerDTO saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
+        Customer customer = this.convertToEntity(customerDTO);
+        customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
+        customer.setPets(new ArrayList<Pet>());
+
+        try{
+            return this.convertToDTO(customerService.addCustomer(customer));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        return customerService.getAllCustomers()
+                .stream().map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/customer/pet/{petId}")
@@ -51,4 +80,25 @@ public class UserController {
         throw new UnsupportedOperationException();
     }
 
+    @PostConstruct
+    private void postConstruct(){
+        final Converter<List<Pet>,List<Long>> petListConverter = context ->
+                context.getSource()
+                        .stream()
+                        .map(Pet::getId)
+                        .collect(Collectors.toList());
+
+        modelMapper.typeMap(Customer.class,CustomerDTO.class)
+                .addMappings(mapper -> mapper.using(petListConverter).map(Customer::getPets,CustomerDTO::setPetIds));
+    }
+
+    private CustomerDTO convertToDTO(Customer customer){
+        CustomerDTO customerDTO = modelMapper.map(customer,CustomerDTO.class);
+        return customerDTO;
+    }
+
+    private Customer convertToEntity(CustomerDTO customerDTO){
+        Customer customer = modelMapper.map(customerDTO,Customer.class);
+        return customer;
+    }
 }
