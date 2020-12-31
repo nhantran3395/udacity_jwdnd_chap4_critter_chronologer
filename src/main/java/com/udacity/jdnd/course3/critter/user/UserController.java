@@ -1,7 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
-import exception.CustomerException;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +12,10 @@ import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Handles web requests related to Users.
- *
- * Includes requests for both customers and employees. Splitting this into separate user and customer controllers
- * would be fine too, though that is not part of the required scope for this class.
- */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -32,20 +26,30 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * might cause exception when username is duplicated
+     */
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         Customer customer = this.convertToEntity(customerDTO);
         customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
         customer.setPets(new ArrayList<Pet>());
 
+        Customer customerAdded = null;
+
+
         try{
-            return this.convertToDTO(customerService.addCustomer(customer));
+            customerAdded = customerService.addCustomer(customer);
         }
         catch(Exception e){
             e.printStackTrace();
         }
 
-        return null;
+        if(Objects.isNull(customerDTO)){
+            return null;
+        }
+
+        return this.convertToDTO(customerAdded);
     }
 
     @GetMapping("/customer")
@@ -57,7 +61,13 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Customer owner = customerService.getCustomerByPetId(petId);
+
+        if(Objects.isNull(owner)){
+            return null;
+        }
+
+        return this.convertToDTO(owner);
     }
 
     @PostMapping("/employee")
