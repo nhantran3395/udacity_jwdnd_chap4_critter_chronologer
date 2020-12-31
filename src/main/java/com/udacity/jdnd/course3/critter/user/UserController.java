@@ -37,16 +37,11 @@ public class UserController {
 
         Customer customerAdded = null;
 
-
         try{
             customerAdded = customerService.addCustomer(customer);
         }
         catch(Exception e){
             e.printStackTrace();
-        }
-
-        if(Objects.isNull(customerDTO)){
-            return null;
         }
 
         return this.convertToDTO(customerAdded);
@@ -62,11 +57,6 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         Customer owner = customerService.getCustomerByPetId(petId);
-
-        if(Objects.isNull(owner)){
-            return null;
-        }
-
         return this.convertToDTO(owner);
     }
 
@@ -103,12 +93,20 @@ public class UserController {
     }
 
     private CustomerDTO convertToDTO(Customer customer){
-        CustomerDTO customerDTO = modelMapper.map(customer,CustomerDTO.class);
-        return customerDTO;
+
+        if(Objects.isNull(customer)){
+            return  null;
+        }
+
+        return modelMapper.map(customer,CustomerDTO.class);
     }
 
     private Customer convertToEntity(CustomerDTO customerDTO){
-        Customer customer = modelMapper.map(customerDTO,Customer.class);
-        return customer;
+
+        if(Objects.isNull(customerDTO)){
+            return  null;
+        }
+
+        return modelMapper.map(customerDTO,Customer.class);
     }
 }
