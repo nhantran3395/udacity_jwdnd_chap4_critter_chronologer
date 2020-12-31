@@ -43,7 +43,7 @@ CREATE TABLE [Schedule] (
 CREATE TABLE [Pet] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [name] nvarchar(255) NOT NULL,
-  [birthday] date NOT NULL,
+  [birth_date] date NOT NULL,
   [owner_id] bigint,
   [notes] nvarchar(255) NULL,
   [type] int NOT NULL,
