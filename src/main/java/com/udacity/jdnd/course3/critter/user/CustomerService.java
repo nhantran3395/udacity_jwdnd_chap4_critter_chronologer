@@ -1,11 +1,10 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import exception.CustomerException;
+import exception.CustomerInvalidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 public class CustomerService {
@@ -13,9 +12,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer addCustomer (Customer customer) throws CustomerException {
+    public Customer addCustomer (Customer customer) throws CustomerInvalidException {
         customerRepository.findByUsername(customer.getUsername())
-                .ifPresent(c->{throw new CustomerException("username is duplicated");});
+                .ifPresent(c->{throw new CustomerInvalidException("username is duplicated");});
 
         return customerRepository.save(customer);
     }
@@ -24,4 +23,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer getCustomerByPetId (Long petId) {
+        return customerRepository.findByPets_id(petId).orElse(null);
+    }
 }
