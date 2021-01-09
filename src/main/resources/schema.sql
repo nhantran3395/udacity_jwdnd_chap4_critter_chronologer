@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS employee_available_day;
 DROP TABLE IF EXISTS employee_schedule;
+DROP TABLE IF EXISTS pet_schedule;
 DROP TABLE IF EXISTS employee_skill;
 DROP TABLE IF EXISTS schedule_activity;
 DROP TABLE IF EXISTS available_day;
@@ -31,9 +32,7 @@ CREATE TABLE [available_day] (
 
 CREATE TABLE [schedule] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
-  [pet_id] bigint,
   [date] date NOT NULL,
-  [customer_id] bigint,
   [created_at] datetime NOT NULL,
   [updated_at] datetime NULL
 );
@@ -82,15 +81,17 @@ CREATE TABLE [employee_schedule] (
   PRIMARY KEY ([employee_id], [schedule_id])
 );
 
+CREATE TABLE [pet_schedule] (
+  [pet_id] bigint,
+  [schedule_id] bigint,
+  PRIMARY KEY ([pet_id], [schedule_id])
+);
+
 CREATE TABLE [schedule_activity] (
   [schedule_id] bigint,
   [activity_id] bigint,
   PRIMARY KEY ([schedule_id], [activity_id])
 );
-
-ALTER TABLE [schedule] ADD FOREIGN KEY ([pet_id]) REFERENCES [pet] ([id]);
-
-ALTER TABLE [schedule] ADD FOREIGN KEY ([customer_id]) REFERENCES [customer] ([id]);
 
 ALTER TABLE [pet] ADD FOREIGN KEY ([owner_id]) REFERENCES [customer] ([id]);
 
@@ -105,6 +106,10 @@ ALTER TABLE [employee_available_day] ADD FOREIGN KEY ([available_day_id]) REFERE
 ALTER TABLE [employee_schedule] ADD FOREIGN KEY ([employee_id]) REFERENCES [employee] ([id]);
 
 ALTER TABLE [employee_schedule] ADD FOREIGN KEY ([schedule_id]) REFERENCES [schedule] ([id]);
+
+ALTER TABLE [pet_schedule] ADD FOREIGN KEY ([pet_id]) REFERENCES [pet] ([id]);
+
+ALTER TABLE [pet_schedule] ADD FOREIGN KEY ([schedule_id]) REFERENCES [schedule] ([id]);
 
 ALTER TABLE [schedule_activity] ADD FOREIGN KEY ([schedule_id]) REFERENCES [schedule] ([id]);
 
