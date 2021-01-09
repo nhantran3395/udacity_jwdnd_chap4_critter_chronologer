@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
-import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.user.SkillEnum;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ScheduleDTO {
     private List<Long> employeeIds;
     private List<Long> petIds;
     private LocalDate date;
-    private Set<EmployeeSkill> activities;
+    private Set<SkillEnum> activities;
 
     public List<Long> getEmployeeIds() {
         return employeeIds;
@@ -41,11 +41,11 @@ public class ScheduleDTO {
         this.date = date;
     }
 
-    public Set<EmployeeSkill> getActivities() {
+    public Set<SkillEnum> getActivities() {
         return activities;
     }
 
-    public void setActivities(Set<EmployeeSkill> activities) {
+    public void setActivities(Set<SkillEnum> activities) {
         this.activities = activities;
     }
 }

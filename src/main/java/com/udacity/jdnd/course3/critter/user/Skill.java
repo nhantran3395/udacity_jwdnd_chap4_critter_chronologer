@@ -1,10 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,19 +8,34 @@ import java.util.Set;
 public class Skill {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private EmployeeSkill skill;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime2 default getdate()")
-    private Timestamp createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private SkillEnum skill;
 
     @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
     private Set<Employee> employees = new HashSet<>();
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public SkillEnum getSkill() {
+        return skill;
+    }
+
+    public void setSkill(SkillEnum skill) {
+        this.skill = skill;
+    }
+
+    public Skill() {
+    }
+
+    public Skill(SkillEnum skill) {
+        this.skill = skill;
+    }
 }

@@ -142,9 +142,9 @@ public class CritterFunctionalTest {
         emp2.setDaysAvailable(Sets.newHashSet(DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
         emp3.setDaysAvailable(Sets.newHashSet(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
 
-        emp1.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
-        emp2.setSkills(Sets.newHashSet(EmployeeSkill.PETTING, EmployeeSkill.WALKING));
-        emp3.setSkills(Sets.newHashSet(EmployeeSkill.WALKING, EmployeeSkill.SHAVING));
+        emp1.setSkills(Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.PETTING));
+        emp2.setSkills(Sets.newHashSet(SkillEnum.PETTING, SkillEnum.WALKING));
+        emp3.setSkills(Sets.newHashSet(SkillEnum.WALKING, SkillEnum.SHAVING));
 
         EmployeeDTO emp1n = userController.saveEmployee(emp1);
         EmployeeDTO emp2n = userController.saveEmployee(emp2);
@@ -153,7 +153,7 @@ public class CritterFunctionalTest {
         //make a request that matches employee 1 or 2
         EmployeeRequestDTO er1 = new EmployeeRequestDTO();
         er1.setDate(LocalDate.of(2019, 12, 25)); //wednesday
-        er1.setSkills(Sets.newHashSet(EmployeeSkill.PETTING));
+        er1.setSkills(Sets.newHashSet(SkillEnum.PETTING));
 
         Set<Long> eIds1 = userController.findEmployeesForService(er1).stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
         Set<Long> eIds1expected = Sets.newHashSet(emp1n.getId(), emp2n.getId());
@@ -162,7 +162,7 @@ public class CritterFunctionalTest {
         //make a request that matches only employee 3
         EmployeeRequestDTO er2 = new EmployeeRequestDTO();
         er2.setDate(LocalDate.of(2019, 12, 27)); //friday
-        er2.setSkills(Sets.newHashSet(EmployeeSkill.WALKING, EmployeeSkill.SHAVING));
+        er2.setSkills(Sets.newHashSet(SkillEnum.WALKING, SkillEnum.SHAVING));
 
         Set<Long> eIds2 = userController.findEmployeesForService(er2).stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
         Set<Long> eIds2expected = Sets.newHashSet(emp3n.getId());
@@ -182,7 +182,7 @@ public class CritterFunctionalTest {
         LocalDate date = LocalDate.of(2019, 12, 25);
         List<Long> petList = Lists.newArrayList(petDTO.getId());
         List<Long> employeeList = Lists.newArrayList(employeeDTO.getId());
-        Set<EmployeeSkill> skillSet =  Sets.newHashSet(EmployeeSkill.PETTING);
+        Set<SkillEnum> skillSet =  Sets.newHashSet(SkillEnum.PETTING);
 
         scheduleController.createSchedule(createScheduleDTO(petList, employeeList, date, skillSet));
         ScheduleDTO scheduleDTO = scheduleController.getAllSchedules().get(0);
@@ -195,14 +195,14 @@ public class CritterFunctionalTest {
 
     @Test
     public void testFindScheduleByEntities() {
-        ScheduleDTO sched1 = populateSchedule(1, 2, LocalDate.of(2019, 12, 25), Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
-        ScheduleDTO sched2 = populateSchedule(3, 1, LocalDate.of(2019, 12, 26), Sets.newHashSet(EmployeeSkill.PETTING));
+        ScheduleDTO sched1 = populateSchedule(1, 2, LocalDate.of(2019, 12, 25), Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.WALKING));
+        ScheduleDTO sched2 = populateSchedule(3, 1, LocalDate.of(2019, 12, 26), Sets.newHashSet(SkillEnum.PETTING));
 
         //add a third schedule that shares some employees and pets with the other schedules
         ScheduleDTO sched3 = new ScheduleDTO();
         sched3.setEmployeeIds(sched1.getEmployeeIds());
         sched3.setPetIds(sched2.getPetIds());
-        sched3.setActivities(Sets.newHashSet(EmployeeSkill.SHAVING, EmployeeSkill.PETTING));
+        sched3.setActivities(Sets.newHashSet(SkillEnum.SHAVING, SkillEnum.PETTING));
         sched3.setDate(LocalDate.of(2020, 3, 23));
         scheduleController.createSchedule(sched3);
 
@@ -244,7 +244,7 @@ public class CritterFunctionalTest {
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("TestEmployee");
-        employeeDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
+        employeeDTO.setSkills(Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.PETTING));
         return employeeDTO;
     }
     private static CustomerDTO createCustomerDTO() {
@@ -264,11 +264,11 @@ public class CritterFunctionalTest {
     private static EmployeeRequestDTO createEmployeeRequestDTO() {
         EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
         employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
-        employeeRequestDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
+        employeeRequestDTO.setSkills(Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.WALKING));
         return employeeRequestDTO;
     }
 
-    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
+    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<SkillEnum> activities) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setPetIds(petIds);
         scheduleDTO.setEmployeeIds(employeeIds);
@@ -277,7 +277,7 @@ public class CritterFunctionalTest {
         return scheduleDTO;
     }
 
-    private ScheduleDTO populateSchedule(int numEmployees, int numPets, LocalDate date, Set<EmployeeSkill> activities) {
+    private ScheduleDTO populateSchedule(int numEmployees, int numPets, LocalDate date, Set<SkillEnum> activities) {
         List<Long> employeeIds = IntStream.range(0, numEmployees)
                 .mapToObj(i -> createEmployeeDTO())
                 .map(e -> {

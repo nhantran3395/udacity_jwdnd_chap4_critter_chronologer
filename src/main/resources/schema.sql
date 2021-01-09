@@ -1,17 +1,17 @@
-DROP TABLE IF EXISTS EmployeeAvailability;
-DROP TABLE IF EXISTS EmployeeSchedule;
-DROP TABLE IF EXISTS EmployeeSkill;
-DROP TABLE IF EXISTS ScheduleActivity;
-DROP TABLE IF EXISTS Availability;
-DROP TABLE IF EXISTS Schedule;
-DROP TABLE IF EXISTS Skill;
-DROP TABLE IF EXISTS Activity;
-DROP TABLE IF EXISTS Schedule;
-DROP TABLE IF EXISTS Pet;
-DROP TABLE IF EXISTS Customer;
-DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS employee_available_day;
+DROP TABLE IF EXISTS employee_schedule;
+DROP TABLE IF EXISTS employee_skill;
+DROP TABLE IF EXISTS schedule_activity;
+DROP TABLE IF EXISTS available_day;
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS skill;
+DROP TABLE IF EXISTS activity;
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS pet;
+DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS employee;
 
-CREATE TABLE [Employee] (
+CREATE TABLE [employee] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [username] varchar(20) UNIQUE NOT NULL,
   [name] nvarchar(255) NOT NULL,
@@ -19,19 +19,17 @@ CREATE TABLE [Employee] (
   [updated_at] datetime NULL
 );
 
-CREATE TABLE [Skill] (
+CREATE TABLE [skill] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
-  [skill] int NOT NULL,
-  [created_at] datetime NOT NULL,
-  [updated_at] datetime NULL
+  [skill] int UNIQUE NOT NULL
 );
 
-CREATE TABLE [Availability] (
+CREATE TABLE [available_day] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
-  [day_of_week] nvarchar(255) NOT NULL
+  [day] int NOT NULL
 );
 
-CREATE TABLE [Schedule] (
+CREATE TABLE [schedule] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [pet_id] bigint,
   [date] datetime NOT NULL,
@@ -40,7 +38,7 @@ CREATE TABLE [Schedule] (
   [updated_at] datetime NULL
 );
 
-CREATE TABLE [Pet] (
+CREATE TABLE [pet] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [name] nvarchar(255) NOT NULL,
   [birth_date] date NOT NULL,
@@ -51,7 +49,7 @@ CREATE TABLE [Pet] (
   [updated_at] datetime NULL
 );
 
-CREATE TABLE [Customer] (
+CREATE TABLE [customer] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [username] varchar(20) UNIQUE NOT NULL,
   [name] nvarchar(255) NOT NULL,
@@ -61,56 +59,54 @@ CREATE TABLE [Customer] (
   [updated_at] datetime NULL
 );
 
-CREATE TABLE [Activity] (
+CREATE TABLE [activity] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
-  [activity] int NOT NULL,
-  [created_at] datetime NOT NULL,
-  [updated_at] datetime NULL
+  [activity] int UNIQUE NOT NULL,
 );
 
-CREATE TABLE [EmployeeSkill] (
+CREATE TABLE [employee_skill] (
   [employee_id] bigint,
   [skill_id] bigint,
   PRIMARY KEY ([employee_id], [skill_id])
 );
 
-CREATE TABLE [EmployeeAvailability] (
+CREATE TABLE [employee_available_day] (
   [employee_id] bigint,
-  [availability_id] bigint,
-  PRIMARY KEY ([employee_id], [availability_id])
+  [available_day_id] bigint,
+  PRIMARY KEY ([employee_id], [available_day_id])
 );
 
-CREATE TABLE [EmployeeSchedule] (
+CREATE TABLE [employee_schedule] (
   [employee_id] bigint,
   [schedule_id] bigint,
   PRIMARY KEY ([employee_id], [schedule_id])
 );
 
-CREATE TABLE [ScheduleActivity] (
+CREATE TABLE [schedule_activity] (
   [schedule_id] bigint,
   [activity_id] bigint,
   PRIMARY KEY ([schedule_id], [activity_id])
 );
 
-ALTER TABLE [Schedule] ADD FOREIGN KEY ([pet_id]) REFERENCES [Pet] ([id]);
+ALTER TABLE [schedule] ADD FOREIGN KEY ([pet_id]) REFERENCES [pet] ([id]);
 
-ALTER TABLE [Schedule] ADD FOREIGN KEY ([customer_id]) REFERENCES [Customer] ([id]);
+ALTER TABLE [schedule] ADD FOREIGN KEY ([customer_id]) REFERENCES [customer] ([id]);
 
-ALTER TABLE [Pet] ADD FOREIGN KEY ([owner_id]) REFERENCES [Customer] ([id]);
+ALTER TABLE [pet] ADD FOREIGN KEY ([owner_id]) REFERENCES [customer] ([id]);
 
-ALTER TABLE [EmployeeSkill] ADD FOREIGN KEY ([employee_id]) REFERENCES [Employee] ([id]);
+ALTER TABLE [employee_skill] ADD FOREIGN KEY ([employee_id]) REFERENCES [employee] ([id]);
 
-ALTER TABLE [EmployeeSkill] ADD FOREIGN KEY ([skill_id]) REFERENCES [Skill] ([id]);
+ALTER TABLE [employee_skill] ADD FOREIGN KEY ([skill_id]) REFERENCES [skill] ([id]);
 
-ALTER TABLE [EmployeeAvailability] ADD FOREIGN KEY ([employee_id]) REFERENCES [Employee] ([id]);
+ALTER TABLE [employee_available_day] ADD FOREIGN KEY ([employee_id]) REFERENCES [employee] ([id]);
 
-ALTER TABLE [EmployeeAvailability] ADD FOREIGN KEY ([availability_id]) REFERENCES [Availability] ([id]);
+ALTER TABLE [employee_available_day] ADD FOREIGN KEY ([available_day_id]) REFERENCES [available_day] ([id]);
 
-ALTER TABLE [EmployeeSchedule] ADD FOREIGN KEY ([employee_id]) REFERENCES [Employee] ([id]);
+ALTER TABLE [employee_schedule] ADD FOREIGN KEY ([employee_id]) REFERENCES [employee] ([id]);
 
-ALTER TABLE [EmployeeSchedule] ADD FOREIGN KEY ([schedule_id]) REFERENCES [Schedule] ([id]);
+ALTER TABLE [employee_schedule] ADD FOREIGN KEY ([schedule_id]) REFERENCES [schedule] ([id]);
 
-ALTER TABLE [ScheduleActivity] ADD FOREIGN KEY ([schedule_id]) REFERENCES [Schedule] ([id]);
+ALTER TABLE [schedule_activity] ADD FOREIGN KEY ([schedule_id]) REFERENCES [schedule] ([id]);
 
-ALTER TABLE [ScheduleActivity] ADD FOREIGN KEY ([activity_id]) REFERENCES [Activity] ([id]);
+ALTER TABLE [schedule_activity] ADD FOREIGN KEY ([activity_id]) REFERENCES [activity] ([id]);
 
