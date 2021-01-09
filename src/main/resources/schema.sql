@@ -32,7 +32,7 @@ CREATE TABLE [available_day] (
 CREATE TABLE [schedule] (
   [id] bigint PRIMARY KEY IDENTITY(1, 1),
   [pet_id] bigint,
-  [date] datetime NOT NULL,
+  [date] date NOT NULL,
   [customer_id] bigint,
   [created_at] datetime NOT NULL,
   [updated_at] datetime NULL
