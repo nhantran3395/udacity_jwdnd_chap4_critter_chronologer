@@ -5,7 +5,6 @@ import exception.EmployeeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +36,6 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesMatchedRequest (LocalDate date, Set<SkillEnum> skills){
-        return employeeRepository.findEmployeesAvailableOnGivenDateAndHaveSuitableSkill(date.getDayOfWeek().getValue(),skills.stream().map(SkillEnum::getValue).collect(Collectors.toSet()));
+        return employeeRepository.findEmployeesAvailableOnGivenDateAndHaveSuitableSkill(date.getDayOfWeek().ordinal(),skills.stream().map(SkillEnum::getValue).collect(Collectors.toSet()));
     }
 }
