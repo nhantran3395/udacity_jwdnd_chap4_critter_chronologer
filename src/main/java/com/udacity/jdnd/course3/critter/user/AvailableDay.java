@@ -1,11 +1,16 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 public class AvailableDay {
 
@@ -18,22 +23,6 @@ public class AvailableDay {
 
     @ManyToMany(mappedBy = "availableDays", fetch = FetchType.LAZY)
     private Set<Employee> employees = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public DayOfWeek getDay() {
-        return day;
-    }
-
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.day = dayOfWeek;
-    }
 
     public AvailableDay() {
     }

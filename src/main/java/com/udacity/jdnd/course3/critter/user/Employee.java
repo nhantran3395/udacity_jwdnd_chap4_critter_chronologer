@@ -1,6 +1,8 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.schedule.Schedule;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -9,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 public class Employee {
 
@@ -60,62 +64,6 @@ public class Employee {
                     @JoinColumn(name = "schedule_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     private Set<Schedule> schedules;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Set<Skill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(Set<Skill> skills) {
-        this.skills = skills;
-    }
-
-    public Set<AvailableDay> getAvailableDays() {
-        return availableDays;
-    }
-
-    public void setAvailableDays(Set<AvailableDay> availableDays) {
-        this.availableDays = availableDays;
-    }
 
     public Employee() {
     }
