@@ -1,32 +1,32 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
-import com.udacity.jdnd.course3.critter.user.Customer;
 import com.udacity.jdnd.course3.critter.user.Employee;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
+
+@Getter
+@Setter
 @Entity
 public class Schedule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id", nullable = false)
-    private Pet pet;
+    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    private List<Pet> pets;
 
-    private Timestamp date;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id",nullable = false)
-    private Customer customer;
+    private LocalDate date;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, columnDefinition = "datetime2 default getdate()")
@@ -37,7 +37,7 @@ public class Schedule {
     private Timestamp updatedAt;
 
     @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
-    private Set<Employee> employees = new HashSet<>();
+    private List<Employee> employees;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "ScheduleActivity",
