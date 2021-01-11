@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
@@ -23,7 +24,7 @@ import java.util.stream.IntStream;
 
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
- * Students will need to configure the application to run these tests by adding application.properties file
+ * Students will need to configure the application to run these tests by adding application-test.properties file
  * to the test/resources directory that specifies the datasource. It can run using an in-memory H2 instance
  * and should not try to re-use the same datasource used by the rest of the app.
  *
@@ -31,6 +32,7 @@ import java.util.stream.IntStream;
  */
 @Transactional
 @SpringBootTest(classes = CritterApplication.class)
+@ActiveProfiles("test")
 public class CritterFunctionalTest {
 
     @Autowired
@@ -243,13 +245,16 @@ public class CritterFunctionalTest {
 
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setUsername("testem01");
         employeeDTO.setName("TestEmployee");
         employeeDTO.setSkills(Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.PETTING));
+        employeeDTO.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY,DayOfWeek.WEDNESDAY));
         return employeeDTO;
     }
     private static CustomerDTO createCustomerDTO() {
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setName("TestEmployee");
+        customerDTO.setUsername("testctm01");
+        customerDTO.setName("TestCustomer");
         customerDTO.setPhoneNumber("123-456-789");
         return customerDTO;
     }
@@ -258,6 +263,7 @@ public class CritterFunctionalTest {
         PetDTO petDTO = new PetDTO();
         petDTO.setName("TestPet");
         petDTO.setType(PetType.CAT);
+        petDTO.setBirthDate(LocalDate.of(2018,10,5));
         return petDTO;
     }
 

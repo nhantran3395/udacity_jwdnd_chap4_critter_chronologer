@@ -1,5 +1,9 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.user.Customer;
+import com.udacity.jdnd.course3.critter.user.CustomerRepository;
+import exception.CustomerNotFoundException;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,9 @@ public class PetController {
     private PetService petService;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @PostMapping
@@ -30,6 +37,19 @@ public class PetController {
 
         return this.convertToDTO(petService.addPet(pet));
     }
+
+    @PutMapping("/pet/{petId}")
+    public void setOwner(@RequestBody Long ownerId, @PathVariable long petId) {
+        Pet petUpdated = null;
+
+        try{
+            petUpdated = petService.updatePetOwner(ownerId, petId);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
@@ -56,6 +76,12 @@ public class PetController {
     private void postConstruct(){
         modelMapper.typeMap(Pet.class, PetDTO.class)
                 .addMapping(pet -> pet.getCustomer().getId(),PetDTO::setOwnerId);
+
+        final Converter<Long, Customer> ownerIdToCustomerEntityConverter = context ->
+                customerRepository.findById(context.getSource()).orElseThrow(() -> new CustomerNotFoundException("no such customer"));
+
+        modelMapper.typeMap(PetDTO.class, Pet.class)
+                .addMappings(mapper -> mapper.using(ownerIdToCustomerEntityConverter).map(PetDTO::getOwnerId,Pet::setCustomer));
     }
 
     private PetDTO convertToDTO(Pet pet){
