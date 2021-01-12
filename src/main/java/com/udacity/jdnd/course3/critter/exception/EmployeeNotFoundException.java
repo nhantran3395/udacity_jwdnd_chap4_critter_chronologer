@@ -1,4 +1,4 @@
-package exception;
+package com.udacity.jdnd.course3.critter.exception;
 
 public class EmployeeNotFoundException extends RuntimeException {
 

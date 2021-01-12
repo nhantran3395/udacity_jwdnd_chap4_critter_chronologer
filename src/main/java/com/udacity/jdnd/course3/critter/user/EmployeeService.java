@@ -1,7 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import exception.EmployeeInvalidException;
-import exception.EmployeeNotFoundException;
+import com.udacity.jdnd.course3.critter.exception.EmployeeInvalidException;
+import com.udacity.jdnd.course3.critter.exception.EmployeeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
