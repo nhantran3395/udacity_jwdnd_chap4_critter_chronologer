@@ -11,10 +11,7 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -117,38 +114,62 @@ public class UserController {
 
     @PostConstruct
     private void postConstruct(){
-        final Converter<List<Pet>,List<Long>> petEntityToPetIdConverter = context ->
-                context.getSource()
-                        .stream()
-                        .map(Pet::getId)
-                        .collect(Collectors.toList());
+        final Converter<List<Pet>,List<Long>> petEntityToPetIdConverter = context -> {
+            if(context.getSource() == null){
+                return null;
+            }
+            return context.getSource()
+                    .stream()
+                    .map(Pet::getId)
+                    .collect(Collectors.toList());
+        };
 
         modelMapper.typeMap(Customer.class,CustomerDTO.class)
                 .addMappings(mapper -> mapper.using(petEntityToPetIdConverter).map(Customer::getPets,CustomerDTO::setPetIds));
 
-        final Converter<Set<Skill>,Set<SkillEnum>> skillEntityToSkillEnumConverter = context ->
-                context.getSource()
-                        .stream()
-                        .map(Skill::getSkill)
-                        .collect(Collectors.toSet());
+        final Converter<Set<Skill>,Set<SkillEnum>> skillEntityToSkillEnumConverter = context -> {
+            if(context.getSource() == null){
+                return null;
+            }
 
-        final Converter<Set<SkillEnum>,Set<Skill>> skillEnumToSkillEntityConverter = context ->
-                context.getSource()
-                        .stream()
-                        .map(skill -> skillRepository.findBySkill(skill).orElseGet(null))
-                        .collect(Collectors.toSet());
+            return context.getSource()
+                    .stream()
+                    .map(Skill::getSkill)
+                    .collect(Collectors.toSet());
+        };
 
-        final Converter<Set<AvailableDay>,Set<DayOfWeek>> availableDayEntityToDayOfWeekEnumConverter= context ->
-                context.getSource()
-                        .stream()
-                        .map(AvailableDay::getDay)
-                        .collect(Collectors.toSet());
+        final Converter<Set<SkillEnum>,Set<Skill>> skillEnumToSkillEntityConverter = context ->{
+            if(context.getSource() == null){
+                return null;
+            }
 
-        final Converter<Set<DayOfWeek>,Set<AvailableDay>> dayOfWeekToAvailalbeDayEntityConverter= context ->
-                context.getSource()
-                        .stream()
-                        .map(day->availableDayRepository.findByDay(day).orElseGet(null))
-                        .collect(Collectors.toSet());
+            return context.getSource()
+                    .stream()
+                    .map(skill -> skillRepository.findBySkill(skill).orElseGet(null))
+                    .collect(Collectors.toSet());
+        };
+
+        final Converter<Set<AvailableDay>,Set<DayOfWeek>> availableDayEntityToDayOfWeekEnumConverter= context -> {
+            if(context.getSource() == null){
+                return null;
+            }
+
+            return context.getSource()
+                    .stream()
+                    .map(AvailableDay::getDay)
+                    .collect(Collectors.toSet());
+        };
+
+        final Converter<Set<DayOfWeek>,Set<AvailableDay>> dayOfWeekToAvailalbeDayEntityConverter= context -> {
+            if(context.getSource() == null){
+                return null;
+            }
+
+            return context.getSource()
+                    .stream()
+                    .map(day->availableDayRepository.findByDay(day).orElseGet(null))
+                    .collect(Collectors.toSet());
+        };
 
         modelMapper.typeMap(Employee.class,EmployeeDTO.class)
                 .addMappings(mapper -> mapper.using(skillEntityToSkillEnumConverter).map(Employee::getSkills,EmployeeDTO::setSkills))
