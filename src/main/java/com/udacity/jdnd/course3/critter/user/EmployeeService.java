@@ -36,6 +36,8 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesMatchedRequest (LocalDate date, Set<SkillEnum> skills){
-        return employeeRepository.findEmployeesAvailableOnGivenDateAndHaveSuitableSkill(date.getDayOfWeek().ordinal(),skills.stream().map(SkillEnum::getValue).collect(Collectors.toSet()));
+        return employeeRepository.findEmployeesAvailableOnGivenDateAndHaveSuitableSkill(date.getDayOfWeek().ordinal(),
+                skills.stream().map(SkillEnum::getValue).collect(Collectors.toSet()),
+                skills.size());
     }
 }
