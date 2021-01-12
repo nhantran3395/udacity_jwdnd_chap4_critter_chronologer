@@ -41,7 +41,7 @@ public class Customer {
     @Column(name="updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private List<Pet> pets;
 }
