@@ -35,7 +35,7 @@ public class Employee {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "EmployeeSkill",
             joinColumns = {
                     @JoinColumn(name = "employee_id", referencedColumnName = "id",
@@ -45,7 +45,7 @@ public class Employee {
                             nullable = false, updatable = false)})
     private Set<Skill> skills;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "EmployeeAvailableDay",
             joinColumns = {
                     @JoinColumn(name = "employee_id", referencedColumnName = "id",
