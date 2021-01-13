@@ -12,7 +12,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     @Query(value = "SELECT DISTINCT s.id,s.date,s.created_at,s.updated_at\n" +
             "FROM schedule AS s\n" +
-            "LEFT JOIN pet_schedule AS ps\n" +
+            "LEFT JOIN schedule_pet AS ps\n" +
             "\tON s.id = ps.schedule_id\n" +
             "LEFT JOIN pet AS p\n" +
             "\tON ps.pet_id = p.id\n" +
@@ -21,7 +21,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     @Query(value = "SELECT s.id,s.date,s.created_at,s.updated_at\n" +
             "FROM schedule AS s\n" +
-            "LEFT JOIN employee_schedule AS es\n" +
+            "LEFT JOIN schedule_employee AS es\n" +
             "\tON s.id = es.schedule_id\n" +
             "LEFT JOIN employee AS e\n" +
             "\tON es.employee_id = e.id\n" +
@@ -30,7 +30,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     @Query(value = "SELECT DISTINCT s.id,s.date,s.created_at,s.updated_at\n" +
             "FROM schedule AS s\n" +
-            "LEFT JOIN pet_schedule AS ps\n" +
+            "LEFT JOIN schedule_pet AS ps\n" +
             "\tON s.id = ps.schedule_id\n" +
             "LEFT JOIN pet AS p\n" +
             "\tON ps.pet_id = p.id\n" +
