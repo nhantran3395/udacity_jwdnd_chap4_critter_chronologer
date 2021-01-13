@@ -35,7 +35,7 @@ public class Employee {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "EmployeeSkill",
             joinColumns = {
                     @JoinColumn(name = "employee_id", referencedColumnName = "id",
@@ -45,7 +45,7 @@ public class Employee {
                             nullable = false, updatable = false)})
     private Set<Skill> skills;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "EmployeeAvailableDay",
             joinColumns = {
                     @JoinColumn(name = "employee_id", referencedColumnName = "id",
@@ -55,14 +55,7 @@ public class Employee {
                             nullable = false, updatable = false)})
     private Set<AvailableDay> availableDays;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "EmployeeSchedule",
-            joinColumns = {
-                    @JoinColumn(name = "employee_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)})
+    @ManyToMany(mappedBy = "employees",fetch = FetchType.LAZY)
     private Set<Schedule> schedules;
 
     public Employee() {

@@ -44,13 +44,6 @@ public class Pet {
     @JoinColumn(name = "owner_id",nullable = false)
     private Customer customer;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "PetSchedule",
-            joinColumns = {
-                    @JoinColumn(name = "pet_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)})
+    @ManyToMany(mappedBy = "pets",fetch = FetchType.LAZY)
     private Set<Schedule> schedules;
 }

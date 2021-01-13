@@ -23,7 +23,14 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "SchedulePet",
+            joinColumns = {
+                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "pet_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
     private List<Pet> pets;
 
     private LocalDate date;
@@ -36,10 +43,18 @@ public class Schedule {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany(mappedBy = "schedules", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "ScheduleEmployee",
+            joinColumns = {
+                    @JoinColumn(name = "schedule_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "employee_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+
     private List<Employee> employees;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "ScheduleActivity",
             joinColumns = {
                     @JoinColumn(name = "schedule_id", referencedColumnName = "id",
