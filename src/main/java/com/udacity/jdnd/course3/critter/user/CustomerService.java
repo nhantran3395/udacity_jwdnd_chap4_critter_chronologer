@@ -3,10 +3,12 @@ package com.udacity.jdnd.course3.critter.user;
 import com.udacity.jdnd.course3.critter.exception.CustomerInvalidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CustomerService {
 
     @Autowired
@@ -16,7 +18,13 @@ public class CustomerService {
         customerRepository.findByUsername(customer.getUsername())
                 .ifPresent(c->{throw new CustomerInvalidException("username is duplicated");});
 
-        return customerRepository.save(customer);
+        Customer customerSaved = customerRepository.saveAndFlush(customer);
+
+        if (customerSaved.getPets() != null) {
+            customerSaved.getPets().forEach(pet -> pet.setCustomer(customerSaved));
+        }
+
+        return customerSaved;
     }
 
     public List<Customer> getAllCustomers () {

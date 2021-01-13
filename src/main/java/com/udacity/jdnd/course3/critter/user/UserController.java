@@ -1,6 +1,10 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.exception.AvailableDayNotFoundException;
+import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.exception.SkillNotFoundException;
 import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetRepository;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,9 @@ public class UserController {
     private SkillRepository skillRepository;
 
     @Autowired
+    private PetRepository petRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     /**
@@ -40,7 +47,6 @@ public class UserController {
     public CustomerDTO saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         Customer customer = this.convertToCustomerEntity(customerDTO);
         customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
-        customer.setPets(new ArrayList<Pet>());
 
         Customer customerAdded = null;
 
@@ -124,8 +130,22 @@ public class UserController {
                     .collect(Collectors.toList());
         };
 
+        final Converter<List<Long>,List<Pet>> petIdToPetEntityConverter = context -> {
+            if(context.getSource() == null){
+                return null;
+            }
+            return context.getSource()
+                    .stream()
+                    .map(petId -> petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException("no such pet")))
+                    .collect(Collectors.toList());
+        };
+
+
         modelMapper.typeMap(Customer.class,CustomerDTO.class)
                 .addMappings(mapper -> mapper.using(petEntityToPetIdConverter).map(Customer::getPets,CustomerDTO::setPetIds));
+
+        modelMapper.typeMap(CustomerDTO.class,Customer.class)
+                .addMappings(mapper -> mapper.using(petIdToPetEntityConverter).map(CustomerDTO::getPetIds,Customer::setPets));
 
         final Converter<Set<Skill>,Set<SkillEnum>> skillEntityToSkillEnumConverter = context -> {
             if(context.getSource() == null){
@@ -145,7 +165,7 @@ public class UserController {
 
             return context.getSource()
                     .stream()
-                    .map(skill -> skillRepository.findBySkill(skill).orElseGet(null))
+                    .map(skill -> skillRepository.findBySkill(skill).orElseThrow(() -> new SkillNotFoundException("no such skill")))
                     .collect(Collectors.toSet());
         };
 
@@ -160,14 +180,14 @@ public class UserController {
                     .collect(Collectors.toSet());
         };
 
-        final Converter<Set<DayOfWeek>,Set<AvailableDay>> dayOfWeekToAvailalbeDayEntityConverter= context -> {
+        final Converter<Set<DayOfWeek>,Set<AvailableDay>> dayOfWeekToAvaillabeDayEntityConverter= context -> {
             if(context.getSource() == null){
                 return null;
             }
 
             return context.getSource()
                     .stream()
-                    .map(day->availableDayRepository.findByDay(day).orElseGet(null))
+                    .map(day->availableDayRepository.findByDay(day).orElseThrow(() -> new AvailableDayNotFoundException("no such day")))
                     .collect(Collectors.toSet());
         };
 
@@ -177,7 +197,7 @@ public class UserController {
 
         modelMapper.typeMap(EmployeeDTO.class,Employee.class)
                 .addMappings(mapper -> mapper.using(skillEnumToSkillEntityConverter).map(EmployeeDTO::getSkills,Employee::setSkills))
-                .addMappings(mapper -> mapper.using(dayOfWeekToAvailalbeDayEntityConverter).map(EmployeeDTO::getDaysAvailable,Employee::setAvailableDays));
+                .addMappings(mapper -> mapper.using(dayOfWeekToAvaillabeDayEntityConverter).map(EmployeeDTO::getDaysAvailable,Employee::setAvailableDays));
     }
 
     private CustomerDTO convertToCustomerDTO(Customer customer){
