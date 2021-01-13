@@ -6,10 +6,13 @@ import com.udacity.jdnd.course3.critter.exception.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class PetService {
 
     @Autowired
@@ -19,7 +22,16 @@ public class PetService {
     private CustomerRepository customerRepository;
 
     public Pet addPet (Pet pet){
-        return petRepository.save(pet);
+        Pet petSaved = petRepository.saveAndFlush(pet);
+
+        if(petSaved.getCustomer() != null){
+            if(petSaved.getCustomer().getPets() == null){
+                petSaved.getCustomer().setPets(new ArrayList<>());
+            }
+            petSaved.getCustomer().getPets().add(pet);
+        }
+
+        return petSaved;
     }
 
     public List<Pet> getAllPets (){
