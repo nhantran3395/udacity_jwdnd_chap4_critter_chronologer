@@ -38,7 +38,7 @@ public class PetController {
         return this.convertToDTO(petService.addPet(pet));
     }
 
-    @PutMapping("/pet/{petId}")
+    @PutMapping("/{petId}")
     public void setOwner(@RequestBody Long ownerId, @PathVariable long petId) {
         Pet petUpdated = null;
 
