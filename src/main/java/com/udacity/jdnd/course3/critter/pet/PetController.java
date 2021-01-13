@@ -78,7 +78,13 @@ public class PetController {
                 .addMapping(pet -> pet.getCustomer().getId(),PetDTO::setOwnerId);
 
         final Converter<Long, Customer> ownerIdToCustomerEntityConverter = context ->
-                customerRepository.findById(context.getSource()).orElseThrow(() -> new CustomerNotFoundException("no such customer"));
+        {
+            if(context.getSource() == null){
+                return null;
+            }
+
+            return customerRepository.findById(context.getSource()).orElseThrow(() -> new CustomerNotFoundException("no such customer"));
+        };
 
         modelMapper.typeMap(PetDTO.class, Pet.class)
                 .addMappings(mapper -> mapper.using(ownerIdToCustomerEntityConverter).map(PetDTO::getOwnerId,Pet::setCustomer));
