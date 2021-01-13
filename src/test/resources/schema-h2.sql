@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS employee_available_day;
-DROP TABLE IF EXISTS employee_schedule;
-DROP TABLE IF EXISTS pet_schedule;
+DROP TABLE IF EXISTS schedule_employee;
+DROP TABLE IF EXISTS schedule_pet;
 DROP TABLE IF EXISTS employee_skill;
 DROP TABLE IF EXISTS schedule_activity;
 DROP TABLE IF EXISTS available_day;
@@ -75,13 +75,13 @@ CREATE TABLE employee_available_day (
   PRIMARY KEY (employee_id, available_day_id)
 );
 
-CREATE TABLE employee_schedule (
+CREATE TABLE schedule_employee (
   employee_id bigint,
   schedule_id bigint,
   PRIMARY KEY (employee_id, schedule_id)
 );
 
-CREATE TABLE pet_schedule (
+CREATE TABLE schedule_pet (
   pet_id bigint,
   schedule_id bigint,
   PRIMARY KEY (pet_id, schedule_id)
@@ -103,13 +103,13 @@ ALTER TABLE employee_available_day ADD FOREIGN KEY (employee_id) REFERENCES empl
 
 ALTER TABLE employee_available_day ADD FOREIGN KEY (available_day_id) REFERENCES available_day (id);
 
-ALTER TABLE employee_schedule ADD FOREIGN KEY (employee_id) REFERENCES employee (id);
+ALTER TABLE schedule_employee ADD FOREIGN KEY (employee_id) REFERENCES employee (id);
 
-ALTER TABLE employee_schedule ADD FOREIGN KEY (schedule_id) REFERENCES schedule (id);
+ALTER TABLE schedule_employee ADD FOREIGN KEY (schedule_id) REFERENCES schedule (id);
 
-ALTER TABLE pet_schedule ADD FOREIGN KEY (pet_id) REFERENCES pet (id);
+ALTER TABLE schedule_pet ADD FOREIGN KEY (pet_id) REFERENCES pet (id);
 
-ALTER TABLE pet_schedule ADD FOREIGN KEY (schedule_id) REFERENCES schedule (id);
+ALTER TABLE schedule_pet ADD FOREIGN KEY (schedule_id) REFERENCES schedule (id);
 
 ALTER TABLE schedule_activity ADD FOREIGN KEY (schedule_id) REFERENCES schedule (id);
 

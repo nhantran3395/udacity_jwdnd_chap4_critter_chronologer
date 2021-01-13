@@ -83,7 +83,7 @@ VALUES
 ('2021-01-20',GETDATE(),null)
 ;
 
-INSERT INTO pet_schedule (pet_id,schedule_id)
+INSERT INTO schedule_pet (pet_id,schedule_id)
 VALUES
 (1,1),
 (2,1),
@@ -109,7 +109,7 @@ VALUES
 (3,2)
 ;
 
-INSERT INTO employee_schedule (schedule_id, employee_id)
+INSERT INTO schedule_employee (schedule_id, employee_id)
 VALUES
 (1,5),
 (2,6),
