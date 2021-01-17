@@ -1,8 +1,10 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.util;
 
 import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetRepository;
+import com.udacity.jdnd.course3.critter.user.Customer;
+import com.udacity.jdnd.course3.critter.user.CustomerDTO;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class CustomerModelMapperUtil {
         };
 
 
-        modelMapper.typeMap(Customer.class,CustomerDTO.class)
+        modelMapper.typeMap(Customer.class, CustomerDTO.class)
                 .addMappings(mapper -> mapper.using(petEntityToPetIdConverter).map(Customer::getPets,CustomerDTO::setPetIds));
 
         modelMapper.typeMap(CustomerDTO.class,Customer.class)

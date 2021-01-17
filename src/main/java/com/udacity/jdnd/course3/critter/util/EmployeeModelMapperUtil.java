@@ -1,7 +1,8 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.util;
 
 import com.udacity.jdnd.course3.critter.exception.AvailableDayNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.SkillNotFoundException;
+import com.udacity.jdnd.course3.critter.user.*;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
