@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 public class CustomerDTO {
     private long id;
     private String username;

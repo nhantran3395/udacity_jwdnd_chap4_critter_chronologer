@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.util.CustomerModelMapperUtil;
 import com.udacity.jdnd.course3.critter.util.EmployeeModelMapperUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -44,20 +46,39 @@ public class UserController {
             e.printStackTrace();
         }
 
-        return customerModelMapperUtil.convertToCustomerDTO(customerAdded);
+        CustomerDTO customerDTOReturned = customerModelMapperUtil.convertToCustomerDTO(customerAdded);
+
+        log.info("POST /customer");
+        log.info("Create a new customer");
+        log.info(customerDTO.toString());
+        log.info(customerDTOReturned != null ? customerDTOReturned.toString() : null);
+
+        return customerDTOReturned;
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        return customerService.getAllCustomers()
+        List<CustomerDTO> customerDTOs = customerService.getAllCustomers()
                 .stream().map(customerModelMapperUtil::convertToCustomerDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /customer");
+        log.info("Get info of all customers");
+        log.info(customerDTOs.toString());
+
+        return customerDTOs;
     }
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         Customer owner = customerService.getCustomerByPetId(petId);
-        return customerModelMapperUtil.convertToCustomerDTO(owner);
+        CustomerDTO ownerDTO = customerModelMapperUtil.convertToCustomerDTO(owner);
+
+        log.info("GET /customer/pet/{}",petId);
+        log.info("Get info of customer find by pet id");
+        log.info(ownerDTO.toString());
+
+        return ownerDTO;
     }
 
     @PostMapping("/employee")
