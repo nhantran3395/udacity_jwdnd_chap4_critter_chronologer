@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS employee;
 
 CREATE TABLE employee (
   id bigint PRIMARY KEY AUTO_INCREMENT,
-  username varchar(20) UNIQUE NOT NULL,
+  username varchar(255) UNIQUE NOT NULL,
   name nvarchar(255) NOT NULL,
   created_at datetime NOT NULL,
   updated_at datetime NULL
@@ -50,7 +50,7 @@ CREATE TABLE pet (
 
 CREATE TABLE customer (
   id bigint PRIMARY KEY AUTO_INCREMENT,
-  username varchar(20) UNIQUE NOT NULL,
+  username varchar(255) UNIQUE NOT NULL,
   name nvarchar(255) NOT NULL,
   phone_number nvarchar(255) NOT NULL,
   notes nvarchar(255) NULL,
