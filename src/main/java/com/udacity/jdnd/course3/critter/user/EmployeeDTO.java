@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.DayOfWeek;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@ToString
 public class EmployeeDTO {
     private long id;
     private String username;

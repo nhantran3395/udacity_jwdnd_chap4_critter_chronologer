@@ -94,17 +94,30 @@ public class UserController {
         catch(Exception e){
             e.printStackTrace();
         }
-        
-        return employeeModelMapperUtil.convertToEmployeeDTO(employeeAdded);
+
+        EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeAdded);
+
+        log.info("POST /user/employee");
+        log.info("Create a new employee");
+        log.info(employeeDTO.toString());
+        log.info(employeeDTOReturned != null ? employeeDTOReturned.toString() : null);
+
+        return employeeDTOReturned;
     }
 
     @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        return employeeModelMapperUtil.convertToEmployeeDTO(employeeService.getEmployeeByID(employeeId));
+        EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeService.getEmployeeByID(employeeId));
+
+        log.info("GET /user/employee/{}",employeeId);
+        log.info("Get info of an employee");
+        log.info(employeeDTOReturned.toString());
+
+        return employeeDTOReturned;
     }
 
     @PutMapping("/employee/{employeeId}")
-    public void setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable long employeeId) {
+    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable long employeeId) {
         Set <AvailableDay> availableDays = employeeModelMapperUtil.convertDayOfWeekEnumToAvailableDayEntity(daysAvailable);
         Employee employeeUpdated = null;
 
@@ -114,6 +127,14 @@ public class UserController {
         catch(Exception e){
             e.printStackTrace();
         }
+
+        EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeUpdated);
+
+        log.info("PUT /user/employee/{}",employeeId);
+        log.info("Set available day of an employees: daysAvailable = {}",daysAvailable);
+        log.info(employeeDTOReturned != null ? employeeDTOReturned.toString() : null);
+
+        return employeeDTOReturned;
     }
 
     @GetMapping("/employee/availability")
@@ -121,9 +142,17 @@ public class UserController {
         LocalDate date = employeeRequestDTO.getDate();
         Set<SkillEnum> employeeSkills = employeeRequestDTO.getSkills();
 
-        return employeeService.getEmployeesMatchedRequest(date, employeeSkills).stream()
+        List<EmployeeDTO> employeeDTOs = employeeService.getEmployeesMatchedRequest(date, employeeSkills).stream()
                 .map(employeeModelMapperUtil::convertToEmployeeDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET user/employee/availability");
+        log.info("Get info of employees find by available day and skills");
+        log.info("day: {}",date);
+        log.info("skills: {}",employeeSkills);
+        log.info(employeeDTOs.toString());
+
+        return employeeDTOs;
     }
     
 }
