@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.pet;
 import com.udacity.jdnd.course3.critter.user.Customer;
 import com.udacity.jdnd.course3.critter.user.CustomerRepository;
 import com.udacity.jdnd.course3.critter.exception.CustomerNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/pet")
+@Slf4j
 public class PetController {
 
     @Autowired
@@ -33,13 +35,22 @@ public class PetController {
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = this.convertToEntity(petDTO);
-        pet.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        if (pet != null) {
+            pet.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        }
 
-        return this.convertToDTO(petService.addPet(pet));
+        PetDTO petDTOReturned = this.convertToDTO(petService.addPet(pet));
+
+        log.info("POST /pet");
+        log.info("Create a new pet");
+        log.info(petDTO.toString());
+        log.info(petDTOReturned != null ? petDTOReturned.toString() : null);
+
+        return petDTOReturned;
     }
 
     @PutMapping("/{petId}")
-    public void setOwner(@RequestBody Long ownerId, @PathVariable long petId) {
+    public PetDTO setOwner(@RequestBody Long ownerId, @PathVariable long petId) {
         Pet petUpdated = null;
 
         try{
@@ -48,28 +59,54 @@ public class PetController {
         catch(Exception e){
             e.printStackTrace();
         }
+
+        PetDTO petDTOReturned = this.convertToDTO(petService.addPet(petUpdated));
+
+        log.info("PUT /pet/{}",petId);
+        log.info("Set owner to a pet: ownerId = {}",ownerId);
+        log.info(petDTOReturned != null ? petDTOReturned.toString() : null);
+
+        return this.convertToDTO(petUpdated);
     }
 
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        return this.convertToDTO(petService.getPetById(petId));
+        PetDTO petDTOReturned = this.convertToDTO(petService.getPetById(petId));
+
+        log.info("GET /pet/{}",petId);
+        log.info("Get info of a pet");
+        log.info(petDTOReturned != null ? petDTOReturned.toString() : null);
+
+        return petDTOReturned;
     }
 
     @GetMapping
     public List<PetDTO> getPets(){
-        return petService.getAllPets()
+        List<PetDTO> petDTOS = petService.getAllPets()
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /pet");
+        log.info("Get info of all pets");
+        log.info(petDTOS.toString());
+
+        return petDTOS;
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        return petService.getPetsByOwner(ownerId)
+        List<PetDTO> petDTOs = petService.getPetsByOwner(ownerId)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /pet/owner/{}",ownerId);
+        log.info("Get info of a pet find by owner: ownerId = {}",ownerId);
+        log.info(petDTOs.toString());
+
+        return petDTOs;
     }
 
     @PostConstruct
