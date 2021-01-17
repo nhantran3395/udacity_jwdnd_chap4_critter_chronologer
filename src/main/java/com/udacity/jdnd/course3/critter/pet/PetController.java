@@ -1,18 +1,11 @@
 package com.udacity.jdnd.course3.critter.pet;
 
-import com.udacity.jdnd.course3.critter.user.Customer;
-import com.udacity.jdnd.course3.critter.user.CustomerRepository;
-import com.udacity.jdnd.course3.critter.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -27,19 +20,16 @@ public class PetController {
     private PetService petService;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private PetModelMapperUtil petModelMapperUtil;
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        Pet pet = this.convertToEntity(petDTO);
+        Pet pet = petModelMapperUtil.convertToEntity(petDTO);
         if (pet != null) {
             pet.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         }
 
-        PetDTO petDTOReturned = this.convertToDTO(petService.addPet(pet));
+        PetDTO petDTOReturned = petModelMapperUtil.convertToDTO(petService.addPet(pet));
 
         log.info("POST /pet");
         log.info("Create a new pet");
@@ -60,19 +50,19 @@ public class PetController {
             e.printStackTrace();
         }
 
-        PetDTO petDTOReturned = this.convertToDTO(petService.addPet(petUpdated));
+        PetDTO petDTOReturned = petModelMapperUtil.convertToDTO(petService.addPet(petUpdated));
 
         log.info("PUT /pet/{}",petId);
         log.info("Set owner to a pet: ownerId = {}",ownerId);
         log.info(petDTOReturned != null ? petDTOReturned.toString() : null);
 
-        return this.convertToDTO(petUpdated);
+        return petModelMapperUtil.convertToDTO(petUpdated);
     }
 
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        PetDTO petDTOReturned = this.convertToDTO(petService.getPetById(petId));
+        PetDTO petDTOReturned = petModelMapperUtil.convertToDTO(petService.getPetById(petId));
 
         log.info("GET /pet/{}",petId);
         log.info("Get info of a pet");
@@ -85,7 +75,7 @@ public class PetController {
     public List<PetDTO> getPets(){
         List<PetDTO> petDTOS = petService.getAllPets()
                 .stream()
-                .map(this::convertToDTO)
+                .map(petModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
 
         log.info("GET /pet");
@@ -99,7 +89,7 @@ public class PetController {
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
         List<PetDTO> petDTOs = petService.getPetsByOwner(ownerId)
                 .stream()
-                .map(this::convertToDTO)
+                .map(petModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
 
         log.info("GET /pet/owner/{}",ownerId);
@@ -109,39 +99,4 @@ public class PetController {
         return petDTOs;
     }
 
-    @PostConstruct
-    private void postConstruct(){
-        modelMapper.typeMap(Pet.class, PetDTO.class)
-                .addMapping(pet -> pet.getCustomer().getId(),PetDTO::setOwnerId);
-
-        final Converter<Long, Customer> ownerIdToCustomerEntityConverter = context ->
-        {
-            if(context.getSource() == null){
-                return null;
-            }
-
-            return customerRepository.findById(context.getSource()).orElseThrow(() -> new CustomerNotFoundException("no such customer"));
-        };
-
-        modelMapper.typeMap(PetDTO.class, Pet.class)
-                .addMappings(mapper -> mapper.using(ownerIdToCustomerEntityConverter).map(PetDTO::getOwnerId,Pet::setCustomer));
-    }
-
-    private PetDTO convertToDTO(Pet pet){
-
-        if(Objects.isNull(pet)){
-            return null;
-        }
-
-        return modelMapper.map(pet,PetDTO.class);
-    }
-
-    private Pet convertToEntity(PetDTO petDTO){
-
-        if(Objects.isNull(petDTO)){
-            return null;
-        }
-
-        return modelMapper.map(petDTO,Pet.class);
-    }
 }
