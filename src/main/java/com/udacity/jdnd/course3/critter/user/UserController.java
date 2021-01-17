@@ -48,7 +48,7 @@ public class UserController {
 
         CustomerDTO customerDTOReturned = customerModelMapperUtil.convertToCustomerDTO(customerAdded);
 
-        log.info("POST user/customer");
+        log.info("POST /user/customer");
         log.info("Create a new customer");
         log.info(customerDTO.toString());
         log.info(customerDTOReturned != null ? customerDTOReturned.toString() : null);
@@ -62,7 +62,7 @@ public class UserController {
                 .stream().map(customerModelMapperUtil::convertToCustomerDTO)
                 .collect(Collectors.toList());
 
-        log.info("GET user/customer");
+        log.info("GET /user/customer");
         log.info("Get info of all customers");
         log.info(customerDTOs.toString());
 
@@ -74,7 +74,7 @@ public class UserController {
         Customer owner = customerService.getCustomerByPetId(petId);
         CustomerDTO ownerDTO = customerModelMapperUtil.convertToCustomerDTO(owner);
 
-        log.info("GET user/customer/pet/{}",petId);
+        log.info("GET /user/customer/pet/{}",petId);
         log.info("Get info of customer find by pet id");
         log.info(ownerDTO.toString());
 
@@ -146,7 +146,7 @@ public class UserController {
                 .map(employeeModelMapperUtil::convertToEmployeeDTO)
                 .collect(Collectors.toList());
 
-        log.info("GET user/employee/availability");
+        log.info("GET /user/employee/availability");
         log.info("Get info of employees find by available day and skills");
         log.info("day: {}",date);
         log.info("skills: {}",employeeSkills);
