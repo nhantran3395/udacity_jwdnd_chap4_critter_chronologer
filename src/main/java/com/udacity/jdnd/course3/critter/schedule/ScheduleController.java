@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.util.ScheduleModelMapperUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/schedule")
+@Slf4j
 public class ScheduleController {
 
     @Autowired
@@ -26,40 +28,70 @@ public class ScheduleController {
         Schedule schedule = scheduleModelMapperUtil.convertToEntity(scheduleDTO);
         schedule.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        return scheduleModelMapperUtil.convertToDTO(scheduleService.addSchedule(schedule));
+        ScheduleDTO scheduleDTOReturned = scheduleModelMapperUtil.convertToDTO(scheduleService.addSchedule(schedule));
 
+        log.info("POST /schedule");
+        log.info("Create a new schedule");
+        log.info(scheduleDTO.toString());
+        log.info(scheduleDTOReturned != null ? scheduleDTOReturned.toString() : null);
+
+        return scheduleDTOReturned;
     }
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        return scheduleService.getAllSchedules()
+        List<ScheduleDTO> scheduleDTOs = scheduleService.getAllSchedules()
                 .stream()
                 .map(scheduleModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /schedule");
+        log.info("Get info of all schedules");
+        log.info(scheduleDTOs.toString());
+
+        return scheduleDTOs;
     }
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        return scheduleService.getSchedulesForAPet(petId)
+        List<ScheduleDTO> scheduleDTOs = scheduleService.getSchedulesForAPet(petId)
                 .stream()
                 .map(scheduleModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /schedule/pet/{}",petId);
+        log.info("Get info of schedules find by pet id: {}",petId);
+        log.info(scheduleDTOs.toString());
+
+        return scheduleDTOs;
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        return scheduleService.getSchedulesForAnEmployee(employeeId)
+        List<ScheduleDTO> scheduleDTOs = scheduleService.getSchedulesForAnEmployee(employeeId)
                 .stream()
                 .map(scheduleModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /schedule/employee/{}",employeeId);
+        log.info("Get info of schedules find by employee id: {}",employeeId);
+        log.info(scheduleDTOs.toString());
+
+        return scheduleDTOs;
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        return scheduleService.getSchedulesForACustomer(customerId)
+        List<ScheduleDTO> scheduleDTOs = scheduleService.getSchedulesForACustomer(customerId)
                 .stream()
                 .map(scheduleModelMapperUtil::convertToDTO)
                 .collect(Collectors.toList());
+
+        log.info("GET /schedule/customer/{}",customerId);
+        log.info("Get info of schedules find by customer id: {}",customerId);
+        log.info(scheduleDTOs.toString());
+
+        return scheduleDTOs;
     }
 
 }

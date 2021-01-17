@@ -13,6 +13,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@ToString
 public class ScheduleDTO {
     private Long id;
     private List<Long> employeeIds;
