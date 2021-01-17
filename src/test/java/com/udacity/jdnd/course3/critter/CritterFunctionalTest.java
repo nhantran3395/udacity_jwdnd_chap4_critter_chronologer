@@ -19,6 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -245,16 +246,21 @@ public class CritterFunctionalTest {
 
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setUsername("testem01");
-        employeeDTO.setName("TestEmployee");
+
+        UUID id = UUID.randomUUID();
+
+        employeeDTO.setUsername("testem_"+id);
+        employeeDTO.setName("TestEmployee_"+id);
         employeeDTO.setSkills(Sets.newHashSet(SkillEnum.FEEDING, SkillEnum.PETTING));
-        employeeDTO.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY,DayOfWeek.WEDNESDAY));
         return employeeDTO;
     }
     private static CustomerDTO createCustomerDTO() {
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setUsername("testctm01");
-        customerDTO.setName("TestCustomer");
+
+        UUID id = UUID.randomUUID();
+
+        customerDTO.setUsername("testctm_"+id);
+        customerDTO.setName("TestCustomer_"+id);
         customerDTO.setPhoneNumber("123-456-789");
         return customerDTO;
     }
