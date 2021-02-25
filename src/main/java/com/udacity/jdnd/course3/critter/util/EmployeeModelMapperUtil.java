@@ -1,8 +1,14 @@
 package com.udacity.jdnd.course3.critter.util;
 
+import com.udacity.jdnd.course3.critter.DTO.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.exception.AvailableDayNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.SkillNotFoundException;
-import com.udacity.jdnd.course3.critter.user.*;
+import com.udacity.jdnd.course3.critter.model.AvailableDay;
+import com.udacity.jdnd.course3.critter.model.Employee;
+import com.udacity.jdnd.course3.critter.model.Skill;
+import com.udacity.jdnd.course3.critter.model.model_enum.SkillEnum;
+import com.udacity.jdnd.course3.critter.repository.AvailableDayRepository;
+import com.udacity.jdnd.course3.critter.repository.SkillRepository;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +78,7 @@ public class EmployeeModelMapperUtil {
                     .collect(Collectors.toSet());
         };
 
-        modelMapper.typeMap(Employee.class,EmployeeDTO.class)
+        modelMapper.typeMap(Employee.class, EmployeeDTO.class)
                 .addMappings(mapper -> mapper.using(skillEntityToSkillEnumConverter).map(Employee::getSkills,EmployeeDTO::setSkills))
                 .addMappings(mapper -> mapper.using(availableDayEntityToDayOfWeekEnumConverter).map(Employee::getAvailableDays,EmployeeDTO::setDaysAvailable));
 
