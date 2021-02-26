@@ -1,8 +1,7 @@
 package com.udacity.jdnd.course3.critter.util;
 
 import com.udacity.jdnd.course3.critter.DTO.EmployeeDTO;
-import com.udacity.jdnd.course3.critter.exception.AvailableDayNotFoundException;
-import com.udacity.jdnd.course3.critter.exception.SkillNotFoundException;
+import com.udacity.jdnd.course3.critter.errorhandling.EntityNotFoundException;
 import com.udacity.jdnd.course3.critter.model.AvailableDay;
 import com.udacity.jdnd.course3.critter.model.Employee;
 import com.udacity.jdnd.course3.critter.model.Skill;
@@ -52,7 +51,7 @@ public class EmployeeModelMapperUtil {
 
             return context.getSource()
                     .stream()
-                    .map(skill -> skillRepository.findBySkill(skill).orElseThrow(() -> new SkillNotFoundException("no such skill")))
+                    .map(skill -> skillRepository.findBySkill(skill).orElseThrow(() -> new EntityNotFoundException(Skill.class,"skill",skill.toString())))
                     .collect(Collectors.toSet());
         };
 
@@ -74,7 +73,7 @@ public class EmployeeModelMapperUtil {
 
             return context.getSource()
                     .stream()
-                    .map(day->availableDayRepository.findByDay(day).orElseThrow(() -> new AvailableDayNotFoundException("no such day")))
+                    .map(day->availableDayRepository.findByDay(day).orElseThrow(() -> new EntityNotFoundException(AvailableDay.class,"day",day.toString())))
                     .collect(Collectors.toSet());
         };
 

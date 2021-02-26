@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.util;
 
-import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.errorhandling.EntityNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.model.Customer;
@@ -42,7 +42,7 @@ public class CustomerModelMapperUtil {
             }
             return context.getSource()
                     .stream()
-                    .map(petId -> petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException("no such pet")))
+                    .map(petId -> petRepository.findById(petId).orElseThrow(() -> new EntityNotFoundException(Pet.class,"id",petId.toString())))
                     .collect(Collectors.toList());
         };
 

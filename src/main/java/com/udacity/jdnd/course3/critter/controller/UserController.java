@@ -46,14 +46,8 @@ public class UserController {
         Customer customer = customerModelMapperUtil.convertToCustomerEntity(customerDTO);
         customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
 
-        Customer customerAdded = null;
 
-        try{
-            customerAdded = customerService.addCustomer(customer);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        Customer customerAdded = customerService.addCustomer(customer);
 
         CustomerDTO customerDTOReturned = customerModelMapperUtil.convertToCustomerDTO(customerAdded);
 
@@ -95,14 +89,7 @@ public class UserController {
         Employee employee = employeeModelMapperUtil.convertToEmployeeEntity(employeeDTO);
         employee.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        Employee employeeAdded = null;
-
-        try{
-            employeeAdded = employeeService.addEmployee(employee);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        Employee employeeAdded = employeeAdded = employeeService.addEmployee(employee);
 
         EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeAdded);
 
@@ -126,16 +113,9 @@ public class UserController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable long employeeId) {
+    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable long employeeId) throws Exception {
         Set <AvailableDay> availableDays = employeeModelMapperUtil.convertDayOfWeekEnumToAvailableDayEntity(daysAvailable);
-        Employee employeeUpdated = null;
-
-        try{
-            employeeUpdated = employeeService.updateEmployeeAvailability(availableDays,employeeId);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        Employee employeeUpdated = employeeService.updateEmployeeAvailability(availableDays,employeeId);
 
         EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeUpdated);
 

@@ -44,15 +44,8 @@ public class PetController {
     }
 
     @PutMapping("/{petId}")
-    public PetDTO setOwner(@RequestBody Long ownerId, @PathVariable long petId) {
-        Pet petUpdated = null;
-
-        try{
-            petUpdated = petService.updatePetOwner(ownerId, petId);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+    public PetDTO setOwner(@RequestBody Long ownerId, @PathVariable long petId) throws Exception {
+        Pet petUpdated = petService.updatePetOwner(ownerId, petId);
 
         PetDTO petDTOReturned = petModelMapperUtil.convertToDTO(petService.addPet(petUpdated));
 

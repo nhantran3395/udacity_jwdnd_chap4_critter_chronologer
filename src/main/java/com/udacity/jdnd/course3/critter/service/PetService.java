@@ -1,11 +1,10 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.errorhandling.EntityNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
-import com.udacity.jdnd.course3.critter.exception.CustomerNotFoundException;
-import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,17 +39,21 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet getPetById (Long id) {
-        return petRepository.findById(id).orElse(null);
+    public Pet getPetById (Long petId) {
+        return petRepository.findById(petId).orElseThrow(()->{return new EntityNotFoundException(Pet.class,"id",petId.toString());});
     }
 
     public List<Pet> getPetsByOwner (Long ownerId) {
+        if(!customerRepository.findById(ownerId).isPresent()){
+            throw new EntityNotFoundException(Customer.class,"ownerId",ownerId.toString());
+        }
+
         return petRepository.findByCustomer_id(ownerId);
     }
 
     public Pet updatePetOwner (Long ownerId, Long petId) throws Exception {
-        Pet pet = petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException("no such pet"));
-        Customer customer = customerRepository.findById(ownerId).orElseThrow(() -> new CustomerNotFoundException("no such customer"));
+        Pet pet = petRepository.findById(petId).orElseThrow(() -> new EntityNotFoundException(Pet.class,"id",petId.toString()));
+        Customer customer = customerRepository.findById(ownerId).orElseThrow(() -> new EntityNotFoundException(Customer.class,"ownerId",ownerId.toString()));
 
         pet.setCustomer(customer);
 

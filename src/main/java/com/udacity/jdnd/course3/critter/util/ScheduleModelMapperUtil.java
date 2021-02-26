@@ -1,8 +1,6 @@
 package com.udacity.jdnd.course3.critter.util;
 
-import com.udacity.jdnd.course3.critter.exception.ActivityNotFoundException;
-import com.udacity.jdnd.course3.critter.exception.EmployeeNotFoundException;
-import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.errorhandling.EntityNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.model.Activity;
@@ -60,7 +58,7 @@ public class ScheduleModelMapperUtil {
 
             return  context.getSource()
                     .stream()
-                    .map(activity -> activityRepository.findByActivity(activity).orElseThrow(() -> new ActivityNotFoundException("no such activity")))
+                    .map(activity -> activityRepository.findByActivity(activity).orElseThrow(() -> new EntityNotFoundException(Activity.class,"activity",activity.toString())))
                     .collect(Collectors.toSet());
         };
 
@@ -82,7 +80,7 @@ public class ScheduleModelMapperUtil {
 
             return context.getSource()
                     .stream()
-                    .map(petId -> petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException("no such pet")))
+                    .map(petId -> petRepository.findById(petId).orElseThrow(() -> new EntityNotFoundException(Pet.class,"id",petId.toString())))
                     .collect(Collectors.toList());
         };
 
@@ -105,7 +103,7 @@ public class ScheduleModelMapperUtil {
 
             return context.getSource()
                     .stream()
-                    .map(employeeId -> employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException("no such employee")))
+                    .map(employeeId -> employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException(Employee.class,"id",employeeId.toString())))
                     .collect(Collectors.toList());
         };
 
