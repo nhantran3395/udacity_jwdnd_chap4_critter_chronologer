@@ -5,6 +5,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -31,6 +33,8 @@ public class Schedule {
                             nullable = false, updatable = false)})
     private List<Pet> pets;
 
+    @NotNull
+    @FutureOrPresent
     private LocalDate date;
 
     @CreatedDate

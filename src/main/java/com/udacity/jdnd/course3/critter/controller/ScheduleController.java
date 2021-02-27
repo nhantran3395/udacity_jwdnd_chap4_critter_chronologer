@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 
     @PostMapping
-    public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+    public ScheduleDTO createSchedule(@RequestBody @Valid ScheduleDTO scheduleDTO) {
         Schedule schedule = scheduleModelMapperUtil.convertToEntity(scheduleDTO);
         schedule.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
