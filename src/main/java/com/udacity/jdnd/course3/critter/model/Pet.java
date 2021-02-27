@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Set;
@@ -23,10 +25,11 @@ public class Pet {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @NotNull
     private PetType type;
 
-    @NotBlank
+    @NotNull
+    @Past
     private LocalDate birthDate;
 
     private String notes;
