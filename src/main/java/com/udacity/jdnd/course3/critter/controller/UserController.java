@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/employee")
-    public EmployeeDTO saveEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
         Employee employee = employeeModelMapperUtil.convertToEmployeeEntity(employeeDTO);
         employee.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
@@ -100,22 +100,22 @@ public class UserController {
         log.info(employeeDTO.toString());
         log.info(employeeDTOReturned != null ? employeeDTOReturned.toString() : null);
 
-        return employeeDTOReturned;
+        return new ResponseEntity<EmployeeDTO>(employeeDTOReturned,HttpStatus.CREATED);
     }
 
     @GetMapping("/employee/{employeeId}")
-    public EmployeeDTO getEmployee(@PathVariable long employeeId) {
+    public ResponseEntity<EmployeeDTO> getEmployee(@PathVariable long employeeId) {
         EmployeeDTO employeeDTOReturned = employeeModelMapperUtil.convertToEmployeeDTO(employeeService.getEmployeeByID(employeeId));
 
         log.info("GET /user/employee/{}",employeeId);
         log.info("Get info of an employee");
         log.info(employeeDTOReturned.toString());
 
-        return employeeDTOReturned;
+        return new ResponseEntity<EmployeeDTO>(employeeDTOReturned,HttpStatus.OK);
     }
 
     @PutMapping("/employee/{employeeId}")
-    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable Long employeeId) throws Exception {
+    public ResponseEntity<EmployeeDTO> setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable Long employeeId) throws Exception {
         Set <AvailableDay> availableDays = employeeModelMapperUtil.convertDayOfWeekEnumToAvailableDayEntity(daysAvailable);
         Employee employeeUpdated = employeeService.updateEmployeeAvailability(availableDays,employeeId);
 
@@ -125,11 +125,11 @@ public class UserController {
         log.info("Set available day of an employees: daysAvailable = {}",daysAvailable);
         log.info(employeeDTOReturned != null ? employeeDTOReturned.toString() : null);
 
-        return employeeDTOReturned;
+        return new ResponseEntity<EmployeeDTO>(employeeDTOReturned,HttpStatus.OK);
     }
 
     @GetMapping("/employee/availability")
-    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+    public ResponseEntity<List<EmployeeDTO>> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
         LocalDate date = employeeRequestDTO.getDate();
         Set<SkillEnum> employeeSkills = employeeRequestDTO.getSkills();
 
@@ -143,7 +143,7 @@ public class UserController {
         log.info("skills: {}",employeeSkills);
         log.info(employeeDTOs.toString());
 
-        return employeeDTOs;
+        return new ResponseEntity<List<EmployeeDTO>>(employeeDTOs,HttpStatus.OK);
     }
     
 }
