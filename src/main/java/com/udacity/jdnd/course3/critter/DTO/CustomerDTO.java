@@ -29,6 +29,5 @@ public class CustomerDTO {
 
     private String notes;
 
-    @NotNull
     private List<Long> petIds;
 }
