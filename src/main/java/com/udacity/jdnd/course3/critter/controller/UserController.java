@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @PostMapping("/employee")
-    public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public EmployeeDTO saveEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
         Employee employee = employeeModelMapperUtil.convertToEmployeeEntity(employeeDTO);
         employee.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
@@ -113,7 +113,7 @@ public class UserController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable long employeeId) throws Exception {
+    public EmployeeDTO setAvailability(@RequestBody Set<java.time.DayOfWeek> daysAvailable, @PathVariable Long employeeId) throws Exception {
         Set <AvailableDay> availableDays = employeeModelMapperUtil.convertDayOfWeekEnumToAvailableDayEntity(daysAvailable);
         Employee employeeUpdated = employeeService.updateEmployeeAvailability(availableDays,employeeId);
 

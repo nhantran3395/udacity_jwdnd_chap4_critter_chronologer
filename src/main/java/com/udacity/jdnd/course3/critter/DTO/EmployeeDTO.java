@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.time.DayOfWeek;
 import java.util.Set;
 
@@ -16,9 +17,14 @@ import java.util.Set;
 @Setter
 @ToString
 public class EmployeeDTO {
-    private long id;
+    private Long id;
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String name;
+
     private Set<SkillEnum> skills;
     private Set<DayOfWeek> daysAvailable;
 }

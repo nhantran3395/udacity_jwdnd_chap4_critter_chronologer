@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,12 +13,13 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Column(unique = true)
@@ -57,10 +59,7 @@ public class Employee {
     @ManyToMany(mappedBy = "employees",fetch = FetchType.LAZY)
     private Set<Schedule> schedules;
 
-    public Employee() {
-    }
-
-    public Employee(@NotNull String username, @NotNull String name, Set<AvailableDay> availableDays) {
+    public Employee(String username, String name, Set<AvailableDay> availableDays) {
         this.username = username;
         this.name = name;
         this.availableDays = availableDays;
