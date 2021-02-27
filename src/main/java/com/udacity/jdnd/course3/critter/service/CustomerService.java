@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.errorhandling.EntityNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Customer;
+import com.udacity.jdnd.course3.critter.model.Employee;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
@@ -38,6 +39,10 @@ public class CustomerService {
 
     public List<Customer> getAllCustomers () {
         return customerRepository.findAll();
+    }
+
+    public Customer getCustomerById (Long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(()->{return new EntityNotFoundException(Employee.class,"id",customerId.toString());});
     }
 
     public Customer getCustomerByPetId (Long petId) {

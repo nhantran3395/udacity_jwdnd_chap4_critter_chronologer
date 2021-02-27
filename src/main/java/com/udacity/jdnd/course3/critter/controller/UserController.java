@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.controller;
 import com.udacity.jdnd.course3.critter.DTO.CustomerDTO;
 import com.udacity.jdnd.course3.critter.DTO.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.DTO.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.DTO.PetDTO;
 import com.udacity.jdnd.course3.critter.model.AvailableDay;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.Employee;
@@ -73,6 +74,18 @@ public class UserController {
 
         return new ResponseEntity<List<CustomerDTO>>(customerDTOs,HttpStatus.OK);
     }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<CustomerDTO> getAllCustomers(@PathVariable Long customerId){
+        CustomerDTO customerDTOReturned = customerModelMapperUtil.convertToCustomerDTO(customerService.getCustomerById(customerId));
+
+        log.info("GET /customer/{}",customerId);
+        log.info("Get info of a customer");
+        log.info(customerDTOReturned.toString());
+
+        return new ResponseEntity<CustomerDTO> (customerDTOReturned,HttpStatus.OK);
+    }
+
 
     @GetMapping("/customer/pet/{petId}")
     public ResponseEntity<CustomerDTO> getOwnerByPet(@PathVariable long petId){
