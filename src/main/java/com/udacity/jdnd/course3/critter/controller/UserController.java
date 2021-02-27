@@ -13,6 +13,8 @@ import com.udacity.jdnd.course3.critter.util.CustomerModelMapperUtil;
 import com.udacity.jdnd.course3.critter.util.EmployeeModelMapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,7 +44,7 @@ public class UserController {
      * might cause com.udacity.jdnd.course3.critter.exception when username is duplicated
      */
     @PostMapping("/customer")
-    public CustomerDTO saveCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
         Customer customer = customerModelMapperUtil.convertToCustomerEntity(customerDTO);
         customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
 
@@ -56,11 +58,11 @@ public class UserController {
         log.info(customerDTO.toString());
         log.info(customerDTOReturned != null ? customerDTOReturned.toString() : null);
 
-        return customerDTOReturned;
+        return new ResponseEntity<CustomerDTO>(customerDTOReturned, HttpStatus.CREATED);
     }
 
     @GetMapping("/customer")
-    public List<CustomerDTO> getAllCustomers(){
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers(){
         List<CustomerDTO> customerDTOs = customerService.getAllCustomers()
                 .stream().map(customerModelMapperUtil::convertToCustomerDTO)
                 .collect(Collectors.toList());
@@ -69,11 +71,11 @@ public class UserController {
         log.info("Get info of all customers");
         log.info(customerDTOs.toString());
 
-        return customerDTOs;
+        return new ResponseEntity<List<CustomerDTO>>(customerDTOs,HttpStatus.OK);
     }
 
     @GetMapping("/customer/pet/{petId}")
-    public CustomerDTO getOwnerByPet(@PathVariable long petId){
+    public ResponseEntity<CustomerDTO> getOwnerByPet(@PathVariable long petId){
         Customer owner = customerService.getCustomerByPetId(petId);
         CustomerDTO ownerDTO = customerModelMapperUtil.convertToCustomerDTO(owner);
 
@@ -81,7 +83,7 @@ public class UserController {
         log.info("Get info of customer find by pet id");
         log.info(ownerDTO.toString());
 
-        return ownerDTO;
+        return new ResponseEntity<CustomerDTO>(ownerDTO,HttpStatus.OK);
     }
 
     @PostMapping("/employee")
