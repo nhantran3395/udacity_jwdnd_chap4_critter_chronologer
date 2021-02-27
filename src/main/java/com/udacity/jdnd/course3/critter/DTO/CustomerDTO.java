@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -28,5 +29,6 @@ public class CustomerDTO {
 
     private String notes;
 
+    @NotNull
     private List<Long> petIds;
 }
