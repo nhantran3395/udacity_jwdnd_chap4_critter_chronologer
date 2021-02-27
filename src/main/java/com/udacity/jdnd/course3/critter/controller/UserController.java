@@ -42,7 +42,7 @@ public class UserController {
      * might cause com.udacity.jdnd.course3.critter.exception when username is duplicated
      */
     @PostMapping("/customer")
-    public CustomerDTO saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO saveCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
         Customer customer = customerModelMapperUtil.convertToCustomerEntity(customerDTO);
         customer.setCreateAt(new Timestamp(System.currentTimeMillis()));
 

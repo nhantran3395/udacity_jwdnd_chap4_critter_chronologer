@@ -1,13 +1,12 @@
 package com.udacity.jdnd.course3.critter.model;
 
-import com.udacity.jdnd.course3.critter.model.Pet;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -20,14 +19,14 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(unique = true)
     private String username;
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     @Column(name="phone_number")
     private String phoneNumber;
 

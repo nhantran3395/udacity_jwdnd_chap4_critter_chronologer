@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -14,10 +15,18 @@ import java.util.List;
 @Setter
 @ToString
 public class CustomerDTO {
-    private long id;
+    private Long id;
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String phoneNumber;
+
     private String notes;
+
     private List<Long> petIds;
 }
