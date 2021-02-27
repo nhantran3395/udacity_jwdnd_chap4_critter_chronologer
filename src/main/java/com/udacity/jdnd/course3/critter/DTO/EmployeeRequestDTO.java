@@ -2,6 +2,8 @@ package com.udacity.jdnd.course3.critter.DTO;
 
 import com.udacity.jdnd.course3.critter.model.model_enum.SkillEnum;
 
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -10,7 +12,12 @@ import java.util.Set;
  * to the database directly.
  */
 public class EmployeeRequestDTO {
+
+    @NotNull
     private Set<SkillEnum> skills;
+
+    @NotNull
+    @FutureOrPresent
     private LocalDate date;
 
     public Set<SkillEnum> getSkills() {
