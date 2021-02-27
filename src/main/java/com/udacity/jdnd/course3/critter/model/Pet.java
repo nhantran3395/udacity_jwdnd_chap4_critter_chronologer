@@ -7,7 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Set;
@@ -20,13 +20,13 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     private PetType type;
 
-    @NotNull
+    @NotBlank
     private LocalDate birthDate;
 
     private String notes;

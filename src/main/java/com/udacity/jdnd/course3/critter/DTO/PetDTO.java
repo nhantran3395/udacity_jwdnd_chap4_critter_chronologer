@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 /**
@@ -16,9 +17,17 @@ import java.time.LocalDate;
 @ToString
 public class PetDTO {
     private Long id;
+
+    @NotBlank
     private PetType type;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private Long ownerId;
+
+    @NotBlank
     private LocalDate birthDate;
     private String notes;
 }

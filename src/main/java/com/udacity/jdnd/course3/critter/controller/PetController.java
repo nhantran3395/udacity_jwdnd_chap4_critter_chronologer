@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class PetController {
     private PetModelMapperUtil petModelMapperUtil;
 
     @PostMapping
-    public PetDTO savePet(@RequestBody PetDTO petDTO) {
+    public PetDTO savePet(@RequestBody @Valid PetDTO petDTO) {
         Pet pet = petModelMapperUtil.convertToEntity(petDTO);
         if (pet != null) {
             pet.setCreatedAt(new Timestamp(System.currentTimeMillis()));
