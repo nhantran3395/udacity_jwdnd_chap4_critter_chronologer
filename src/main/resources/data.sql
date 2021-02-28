@@ -1,24 +1,24 @@
 INSERT INTO customer (created_at,username,name,notes,phone_number,updated_at)
 VALUES
-(GETDATE(),'marygarcia','Mary W Gracia',null,'917-923-0940',null),
-(GETDATE(),'kenneth123','Kenneth K Payan',null,'561-652-6640',null)
+(CURRENT_TIMESTAMP,'marygarcia','Mary W Gracia',null,'917-923-0940',null),
+(CURRENT_TIMESTAMP,'kenneth123','Kenneth K Payan',null,'561-652-6640',null)
 ;
 
 INSERT INTO pet (name,birth_date,owner_id,notes,type,created_at,updated_at)
 VALUES
-('Tucker','2018-09-23',1,null,1,GETDATE(),null),
-('Olive','2020-05-30',1,null,0,GETDATE(),null),
-('Cooper','2016-01-25',2,null,1,GETDATE(),null)
+('Tucker','2018-09-23',1,null,1,CURRENT_TIMESTAMP,null),
+('Olive','2020-05-30',1,null,0,CURRENT_TIMESTAMP,null),
+('Cooper','2016-01-25',2,null,1,CURRENT_TIMESTAMP,null)
 ;
 
 INSERT INTO employee (username,name,created_at,updated_at)
 VALUES
-('apenner','Amaleta Penner',GETDATE(),null),
-('tbeddarda','Teddy Beddard',GETDATE(),null),
-('mdanielskib','Maureene Danielski',GETDATE(),null),
-('charlenel','Charlene Lynch',GETDATE(),null),
-('srichardson29','Sherri Richardson',GETDATE(),null),
-('robertbyrd','Robert Byrd',GETDATE(),null)
+('apenner','Amaleta Penner',CURRENT_TIMESTAMP,null),
+('tbeddarda','Teddy Beddard',CURRENT_TIMESTAMP,null),
+('mdanielskib','Maureene Danielski',CURRENT_TIMESTAMP,null),
+('charlenel','Charlene Lynch',CURRENT_TIMESTAMP,null),
+('srichardson29','Sherri Richardson',CURRENT_TIMESTAMP,null),
+('robertbyrd','Robert Byrd',CURRENT_TIMESTAMP,null)
 ;
 
 INSERT INTO skill (skill) VALUES
@@ -78,9 +78,9 @@ VALUES
 
 INSERT INTO schedule (date,created_at,updated_at)
 VALUES
-('2021-01-10',GETDATE(),null),
-('2021-01-16',GETDATE(),null),
-('2021-01-20',GETDATE(),null)
+('2021-01-10',CURRENT_TIMESTAMP,null),
+('2021-01-16',CURRENT_TIMESTAMP,null),
+('2021-01-20',CURRENT_TIMESTAMP,null)
 ;
 
 INSERT INTO schedule_pet (pet_id,schedule_id)
