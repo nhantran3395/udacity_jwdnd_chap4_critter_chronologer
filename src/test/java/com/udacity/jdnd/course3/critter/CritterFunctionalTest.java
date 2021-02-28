@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.udacity.jdnd.course3.critter.DTO.*;
 import com.udacity.jdnd.course3.critter.controller.UserController;
 import com.udacity.jdnd.course3.critter.controller.PetController;
+import com.udacity.jdnd.course3.critter.model.Skill;
 import com.udacity.jdnd.course3.critter.model.model_enum.PetType;
 import com.udacity.jdnd.course3.critter.controller.ScheduleController;
 import com.udacity.jdnd.course3.critter.model.model_enum.SkillEnum;
@@ -23,11 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -76,10 +79,13 @@ public class CritterFunctionalTest {
 
     @Test
     public void checkCreateEmployeeSuccessful() throws Exception {
+        List<String> skills = Stream.of("\"" + "WALKING" + "\"").collect(Collectors.toList());
+        List<String> availableDays = Stream.of("\"" + "MONDAY" + "\"").collect(Collectors.toList());
+
         mvc.perform(post("/user/employee")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getCreateEmployeeRequestBody("bernardharv","Bernard Harvey",
-                        List.of("\"" + "WALKING" + "\""),List.of("\"" + "MONDAY" + "\"")))
+                        skills,availableDays))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
